@@ -10,16 +10,19 @@ let height = 400
 
 
 
-let imageCircle (radius:float32) (center:PointF) (useRect:bool) =
+let imageShape (radius:float32) (center:PointF) (useRect:bool) (useStar:bool)=
     // Create a new image with white background
     let image = new Image<Rgba32>(width, height)
     image.Mutate(fun ctx ->
         ctx.Fill(Color.White) |> ignore
         // Draw a filled black circle
-        let aa = new RectangleF(center,Size(int radius,int radius))
+        let rect = new RectangleF(center,Size(int radius,int radius))
+        let star = new Star(center, 4, float32 radius * (float32 0.5), radius)
         let circle = EllipsePolygon(center, radius)
         if useRect then
-            ctx.Fill(Color.Black, aa) |> ignore
+            ctx.Fill(Color.Black, rect) |> ignore
+        else if useStar then
+            ctx.Fill(Color.Black, star) |> ignore
         else
             ctx.Fill(Color.Black, circle) |> ignore
 
@@ -58,7 +61,7 @@ let main argv =
 
         // Save to PNG
         let outputPath = $"img/img{i}.png"
-        use image = imageCircle radius center useRect
+        use image = imageShape radius center useRect (not useRect)
         image.Save(outputPath)
         printfn $"Image saved to {outputPath}"
     0

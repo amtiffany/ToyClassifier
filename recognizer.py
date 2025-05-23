@@ -36,7 +36,11 @@ transform = transforms.Compose([
 ])
 
 # 4. Folder to classify
-image_folder = "input_images"  # CHANGE THIS
+image_folder = "input_images" 
+
+if not (os.path.exists(image_folder)): # create new directory if it doesnt already exist
+    os.mkdir(image_folder)
+
 image_files = [f for f in os.listdir(image_folder) if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
 
 # 5. Predict on each image
